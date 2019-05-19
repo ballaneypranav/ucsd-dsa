@@ -1,6 +1,71 @@
 #include <iostream>
 #include <vector>
-using std::vector;
+
+using namespace std;
+
+long long fibonacci_partial_sum(long long from, long long to)
+{
+
+    int p = -1;
+    vector<long long> fibListMod;
+    fibListMod.push_back(0);
+    fibListMod.push_back(1);
+
+    int sum = from < 2  && to >= 1 ? 1 : 0;
+
+    for (int i = 2; i <= to; i++)
+    {
+        fibListMod.push_back((fibListMod[i-1] + fibListMod[i-2]) % 10);
+        
+        if (fibListMod[i] == 1 && fibListMod[i-1] == 0)
+        {
+            p = i-1;
+            break;
+        }
+
+        if (i >= from)
+            sum = (sum + fibListMod[i]) % 10;
+    }
+
+    if (p == -1)
+        return sum;
+
+    long long quotient1 = from / p;
+    long long remainder1 = from % p;
+
+    long long quotient2 = to / p;
+    long long remainder2 = to % p;
+
+    for (int i = remainder1; i <= p; i++)
+        sum = (sum + fibListMod[i]) % 10;
+
+    sum = (sum * (quotient2 - quotient1 - 1)) % 10;
+
+    for (int i = 1; i <= remainder2; i++)
+    {
+        sum = (sum + fibListMod[i]) % 10;
+    }
+    return sum;
+}
+
+// long long fibonacci_partial_sum(long long from, long long to) {
+//     vector<long long> fibList;
+
+//     fibList.push_back(0);
+//     fibList.push_back(1);
+
+//     int sum = from < 2  && to > 1 ? 1 : 0;
+
+//     for (int i = 2; i <= to; i++)
+//     {
+//         long long current = (fibList[i - 1] + fibList[i - 2]) % 10;
+//         fibList.push_back((current * current) % 10);
+//         if (i >= from)
+//             sum = (sum + fibList[i]) % 10;
+//     }
+
+//     return sum;
+// }
 
 long long get_fibonacci_partial_sum_naive(long long from, long long to) {
     long long sum = 0;
@@ -24,5 +89,18 @@ long long get_fibonacci_partial_sum_naive(long long from, long long to) {
 int main() {
     long long from, to;
     std::cin >> from >> to;
-    std::cout << get_fibonacci_partial_sum_naive(from, to) << '\n';
+    // int n;
+    // cin >> n;
+    // for (int i = 0; i < n; i++)
+    //     for (int j = 0; j < n; j++)
+    //     {
+    //         long long a = get_fibonacci_partial_sum_naive(i, j);
+    //         long long b = fibonacci_partial_sum(i, j);
+    //         if (a != b)
+    //         {
+    //             cout << i << " " << j << " " << a << " " << b << endl;
+    //         }
+    //     }
+
+    cout << fibonacci_partial_sum(from, to) << "\n";
 }

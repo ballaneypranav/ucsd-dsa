@@ -1,4 +1,29 @@
 #include <iostream>
+#include <vector>
+
+using namespace std;
+
+long long fibonacci_sum_squares(long long n) {
+    vector<long long> fibList;
+
+    long long a = 0;
+    long long b = 1;
+
+    int sum = 1;
+
+    for (int i = 2; i <= n; i++)
+    {
+        long long temp = b;
+        b = (a + b) % 10;
+        a = temp;
+
+        long long sq_digit = (b * b) % 10;
+        
+        sum = (sum + sq_digit) % 10;
+    }
+
+    return sum;
+}
 
 int fibonacci_sum_squares_naive(long long n) {
     if (n <= 1)
@@ -21,5 +46,5 @@ int fibonacci_sum_squares_naive(long long n) {
 int main() {
     long long n = 0;
     std::cin >> n;
-    std::cout << fibonacci_sum_squares_naive(n);
+    std::cout << fibonacci_sum_squares(n) << endl;
 }
