@@ -6,7 +6,7 @@ using namespace std;
 long long fibonacci_partial_sum(long long from, long long to)
 {
 
-    int p = -1;
+    int period = -1;
     vector<long long> fibListMod;
     fibListMod.push_back(0);
     fibListMod.push_back(1);
@@ -19,7 +19,7 @@ long long fibonacci_partial_sum(long long from, long long to)
         
         if (fibListMod[i] == 1 && fibListMod[i-1] == 0)
         {
-            p = i-1;
+            period = i-1;
             break;
         }
 
@@ -27,23 +27,45 @@ long long fibonacci_partial_sum(long long from, long long to)
             sum = (sum + fibListMod[i]) % 10;
     }
 
-    if (p == -1)
+    if (period == -1)
         return sum;
 
-    long long quotient1 = from / p;
-    long long remainder1 = from % p;
-
-    long long quotient2 = to / p;
-    long long remainder2 = to % p;
-
-    for (int i = remainder1; i <= p; i++)
-        sum = (sum + fibListMod[i]) % 10;
-
-    sum = (sum * (quotient2 - quotient1 - 1)) % 10;
-
-    for (int i = 1; i <= remainder2; i++)
+    int sum_all = 0;
+    for (int i = 0; i < period; i++)
     {
-        sum = (sum + fibListMod[i]) % 10;
+        sum_all += fibListMod[i];
+    }
+    cout << sum_all << endl;
+
+    long long quotient1 = from / period;
+    long long remainder1 = from % period;
+
+    long long quotient2 = to / period;
+    long long remainder2 = to % period;
+
+    if (quotient1 == quotient1)
+    {
+        for (int i = remainder1; i <= remainder2; i++)
+        {
+            sum = (sum + fibListMod[i]) % 10;
+        }
+    }
+    else
+    {
+        for (int i = remainder1; i <= period; i++)
+        {
+            sum = (sum + fibListMod[i]) % 10;
+        }
+
+        if (quotient2 != quotient1 + 1)
+        {
+            sum = (sum + (sum_all * (quotient2 - quotient1 - 1))) % 10;
+        }
+
+        for (int i = 1; i <= remainder2; i++)
+        {
+            sum = (sum + fibListMod[i]) % 10;
+        }
     }
     return sum;
 }
